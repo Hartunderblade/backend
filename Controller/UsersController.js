@@ -1,5 +1,7 @@
 "use strict";
-
+const md5  = require('md5');
+// const bcrypt = require('bcrypt');
+// const salt = 10;
 // const { CLIENT_NO_SCHEMA } = require("mysql/lib/protocol/constants/client");
 const response = require("./../response");
 const db = require("./../settings/db");
@@ -27,19 +29,29 @@ exports.signup = (req, res) => {
         row.map((rw) => {response.status(306,{message: `Пользователь с там login - ${rw.login} уже существует. Придумайте новый login.`},res);
           return true;
         });
+        row.map((rw) => {response.status(306,{message: `Эта почта - ${rw.email} уже используется. Укажите другую почту.`},res);
+          return true;
+        });
       }
+      // else if (rows !== "undefined" && rows.length > 0) {
+      //   const row = JSON.parse(JSON.stringify(rows));
+      //   row.map((rw) => {response.status(306,{message: `Эта почта - ${rw.email} уже используется. Укажите другую почту.`},res);
+      //     return true;
+      //   });
+      // }
       else {
         const email = req.body.email;
         const name = req.body.name;
         const surname = req.body.surname;
         const patronymic = req.body.patronymic !== "" ? req.body.surname : "He указано";
+
+        const password = md5(req.body.password) ;
         
-        // const patronymic = req.body.patronymic;
-        // const login = req.body.login;
-        const password = req.body.password;
         const password_repeat = req.body.password_repeat;
+
+        
+
         const login = req.body.login;
-        // const password_repeat = req.body.password_repeat;
 
       
 
